@@ -1,2 +1,2 @@
-# Agente-Reactivo
-# Agente-Reactivo
+# Agente-Reactivo / Deliberativo
+# Agente-Reactivo / Deliberativo
