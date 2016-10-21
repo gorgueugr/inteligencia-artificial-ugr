@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<category>
+<pattern>POSITIVO</pattern>
+<template>
+  <random>
+    <li>Si.</li>
+    <li>Has acertado.</li>
+    <li>Claro que si.</li>
+  </random>
+</template>
+</category>
+
+<category>
+<pattern>NEGATIVO</pattern>
+<template>
+  <random>
+    <li>No.</li>
+    <li>Claro que no.</li>
+    <li>Como puedes pensar eso?, No.</li>
+  </random>
+</template>
+</category>
+
+<category>
+<pattern># adios #</pattern>
+<template>
+  <random>
+    <li>Adios.</li>
+    <li>Hasta luego.</li>
+  </random>
+</template>
+</category>
+</aiml>

@@ -1,0 +1,18 @@
+double Practicar(const Enviroment &T,int jugador,int prof, int &accion){
+  if(prof==0){
+      return ValoracionTest(T,jugador);
+  }else{
+    int ultacc==-1,kk;
+    double valor;
+    Enviroment hijo= T.GenerateNextMove(ultacc);
+    while(ultacc<8){
+      valor= Practicar(hijo,jugador,prof-1,kk);
+      if(valor>max){
+        max=valor;
+        accion=ultacc;
+      }
+      hijo.GenerateNextMove(ultacc);
+    }
+    return max;
+  }
+}

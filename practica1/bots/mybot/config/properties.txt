@@ -1,0 +1,9 @@
+url:No tengo pagina!
+name:GorgueBot
+email:solerpadial@gmail.com
+gender:masculino
+botmaster:Jorge	
+organization:ugr-student
+version:0.0.4
+
+

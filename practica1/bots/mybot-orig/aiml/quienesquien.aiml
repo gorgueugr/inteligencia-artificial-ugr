@@ -1,0 +1,623 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+  <category>
+    <pattern>^ jugar</pattern>
+    <template>
+      <think><set name="topic">jugando</set></think>
+      Solo se jugar al quien es quien quieres?</template>
+  </category>
+
+<topic name="jugando">
+
+    <category>
+    <pattern>Si</pattern>
+    <template>Que quieres hacer ADIVINAR o PENSAR un personaje</template>
+    </category>
+
+
+    <category>
+    <pattern>No</pattern>
+    <template>
+      <think><set name="topic">unknow</set></think>
+      Pues adios
+    </template>
+    </category>
+
+    <category>
+    <pattern> ^ pensar</pattern>
+      <template>
+        <think>
+          <set name="topic">pensar</set>
+        </think>
+        <srai>primeravez</srai>
+      </template>
+    </category>
+
+  <category>
+  <pattern>^ adivinar</pattern>
+  <template>
+    <think>
+      <set name="topic">adivinar</set>
+      <set var="num"><srai>RANDOM 16</srai></set>
+      <set name="personaje_o"><map name="personajes"><get var="num"/></map></set>
+    </think>
+    vale, Dejame que piense....Ya lo tengo, pregunta!
+
+  </template>
+  </category>
+
+
+
+
+</topic>
+
+
+
+<topic name="adivinar">
+
+  <category>
+  <pattern># me rindo #</pattern>
+    <template>
+      jajaja...Era <get name="personaje_o"/>..
+      Quieres volver a jugar?
+      <think><set name="topic">jugando</set></think>
+    </template>
+  </category>
+
+  <category>
+  <pattern>es <set>personajes</set> un personaje</pattern>
+  <template>Si, <star/> es un personaje.</template>
+  </category>
+
+  <category>
+  <pattern>es <set>personajes</set></pattern>
+  <template>
+    <condition name="personaje_o">
+      <li><value><star/></value>
+      Pues...Si!!! Quieres volver a jugar?
+      <think><set name="topic">jugando</set></think>
+    </li>
+      <li><srai>NEGATIVO</srai></li>
+    </condition>
+  </template>
+  </category>
+
+  <category>
+  <pattern>es <set>colordepelo</set></pattern>
+  <template>
+    <srai>pelo CHECK <star/></srai>
+  </template>
+  </category>
+
+  <category>
+  <pattern>es <set>personajes</set> <set>colordepelo</set></pattern>
+  <template>
+    <srai>pelo CHECK <star index="2"/> PERSONAJE <star/></srai>
+  </template>
+  </category>
+
+  <category>
+  <pattern>tiene <set>ante</set> * </pattern>
+  <template>
+    <think>
+      <set var="categoria"><srai>TOP <star index="2"/></srai></set>
+      <set var="estilo"><srai>REMAIN <star index="2"/></srai></set>
+    </think>
+    <srai><get var="categoria"/> CHECK <get var="estilo"/></srai>
+  </template>
+</category>
+
+<category>
+<pattern>tiene <set>personajes</set> <set>ante</set> * </pattern>
+<template>
+  <think>
+    <set var="categoria"><srai>TOP <star index="3"/></srai></set>
+    <set var="estilo"><srai>REMAIN <star index="3"/></srai></set>
+  </think>
+  <srai><get var="categoria"/> CHECK <get var="estilo"/> PERSONAJE <star/></srai>
+</template>
+</category>
+
+  <category>
+   <pattern>* CHECK *</pattern>
+   <template>
+     <think>
+       <set var="leido"><map><name><star/></name><get name="personaje_o"/></map></set>
+     </think>
+     <condition var="leido">
+       <li><value><star index="2"/></value><srai>POSITIVO</srai></li>
+       <li><srai>NEGATIVO</srai></li>
+     </condition>
+  </template>
+  </category>
+
+  <category>
+   <pattern>* CHECK * PERSONAJE *</pattern>
+   <template>
+     <think>
+       <set var="leido"><map><name><star/></name><star index="3"/></map></set>
+     </think>
+     <condition var="leido">
+       <li><value><star index="2"/></value><srai>POSITIVO</srai></li>
+       <li><srai>NEGATIVO</srai></li>
+     </condition>
+  </template>
+  </category>
+
+
+  <category>
+  <pattern>tiene <set>categoria</set> </pattern>
+  <template>
+    <srai><star/> CHECK si</srai>
+  </template>
+  </category>
+
+  <category>
+  <pattern>tiene <set>personajes</set> <set>categoria</set> </pattern>
+  <template>
+    <srai><star index="2"/> CHECK si PERSONAJE <star/></srai>
+  </template>
+  </category>
+
+  <category>
+  <pattern>es <set>ante</set> * </pattern>
+  <template>
+    <srai>genero CHECK <star index="2"/></srai>
+  </template>
+  </category>
+
+  <category>
+  <pattern>es <set>personajes</set> <set>ante</set> * </pattern>
+  <template>
+    <srai>genero CHECK <star index="3"/> PERSONAJE <star/></srai>
+  </template>
+  </category>
+
+
+</topic>
+<topic name="pensar">
+
+  <category>
+    <pattern>sospechosos</pattern>
+    <template>
+    sospechosos: <get name="sospechosos"/>,
+    rasgos :
+    <get name="pelo"/>
+    <get name="ojos"/>
+    <get name="piel"/>
+    <get name="gafas"/>
+    <get name="bigote"/>
+    <get name="barba"/>
+    <get name="genero"/>
+
+    </template>
+  </category>
+
+  <category>
+  <pattern>PRIMERAVEZ</pattern>
+  <template>
+     <think>
+         <set var="contador">1</set>
+         <set var="salida"></set>
+         <set var="ultimo"></set>
+         <set name="pelo"></set>
+         <set name="ojos"></set>
+         <set name="piel"></set>
+         <set name="gafas"></set>
+         <set name="bigote"></set>
+         <set name="barba"></set>
+         <set name="genero"></set>
+         <set name="categorias_res"></set>
+         <set name="tipos_res"></set>
+         <set name="respuestas"></set>
+
+     </think>
+     <condition var="ultimo">
+         <li><value>unknown</value>
+         <think>
+           <set name="sospechosos"> <get var="salida"/> </set>
+           <srai>CALCULARRASGOS</srai>
+         </think>
+         <srai>PREGUNTA</srai>
+
+       </li>
+       <li>
+             <think>
+
+             <set var="salida"><get var="salida"/> <map name="personajes"><get var="contador"/></map></set>
+             <set var="contador">
+                <map name="successor"><get var="contador"/></map>
+             </set>
+             <set var="ultimo"><map name="personajes"><get var="contador"/></map></set>
+
+             </think>
+             <loop/>
+         </li>
+     </condition>
+  </template>
+  </category>
+
+  <category>
+  <pattern>CARGARASGOSDE *</pattern>
+    <template>
+         <think>
+           <set name="pelo"><srai>ADDITEM <map name="pelo"><star/></map> IN <get name="pelo"/></srai></set>
+           <set name="ojos"><srai>ADDITEM <map name="ojos"><star/></map> IN <get name="ojos"/></srai></set>
+           <set name="piel"><srai>ADDITEM <map name="piel"><star/></map> IN <get name="piel"/></srai></set>
+           <set name="gafas"><srai>ADDITEM <map name="gafas"><star/></map> IN <get name="gafas"/></srai></set>
+           <set name="bigote"><srai>ADDITEM <map name="bigote"><star/></map> IN <get name="bigote"/></srai></set>
+           <set name="barba"><srai>ADDITEM <map name="barba"><star/></map> IN <get name="barba"/></srai></set>
+           <set name="genero"><srai>ADDITEM <map name="genero"><star/></map> IN <get name="genero"/></srai></set>
+         </think>
+    </template>
+  </category>
+
+  <category>
+  <pattern>CALCULARRASGOS</pattern>
+    <template>
+         <think>
+           <set name="pelo"></set>
+           <set name="ojos"></set>
+           <set name="piel"></set>
+           <set name="gafas"></set>
+           <set name="bigote"></set>
+           <set name="barba"></set>
+           <set name="genero"></set>
+           <set name="preguntas"><srai>cuenta hasta 7</srai></set>
+           <set var="sig"><srai>ITERATE <get name="sospechosos"/></srai></set>
+         </think>
+         <condition var="sig">
+            <li value="end"></li>
+            <li>
+              <srai>CARGARASGOSDE <get var="sig"/> </srai>
+              <set var="sig"><srai>NEXT</srai></set>
+              <loop/>
+            </li>
+        </condition>
+        <think><srai>COMPROBARPREGUNTAS</srai></think>
+    </template>
+  </category>
+
+  <category>
+  <pattern>COMPROBARPREGUNTAS</pattern>
+    <template>
+         <think>
+           <set name="pelo_n"><srai>COUNT <get name="pelo"/></srai></set>
+           <set name="ojos_n"><srai>COUNT <get name="ojos"/></srai></set>
+           <set name="piel_n"><srai>COUNT <get name="piel"/></srai></set>
+           <set name="gafas_n"><srai>COUNT <get name="gafas"/></srai></set>
+           <set name="bigote_n"><srai>COUNT <get name="bigote"/></srai></set>
+           <set name="barba_n"><srai>COUNT <get name="barba"/></srai></set>
+           <set name="genero_n"><srai>COUNT <get name="genero"/></srai></set>
+         </think>
+         <condition name="pelo_n">
+            <li value="1">
+              <think>
+                <set name="preguntas">
+                  <srai>REMOVEITEM <srai>FINDITEM 1 IN <get name="preguntas"/></srai> IN <get name="preguntas"/></srai>
+                </set>
+              </think>
+            </li>
+            <li></li>
+        </condition>
+        <condition name="ojos_n">
+           <li value="1">
+             <think>
+               <set name="preguntas">
+                 <srai>REMOVEITEM <srai>FINDITEM 2 IN <get name="preguntas"/></srai> IN <get name="preguntas"/></srai>
+               </set>
+             </think>
+           </li>
+           <li></li>
+       </condition>
+       <condition name="piel_n">
+          <li value="1">
+            <think>
+
+              <set name="preguntas">
+                <srai>REMOVEITEM <srai>FINDITEM 3 IN <get name="preguntas"/></srai> IN <get name="preguntas"/></srai>
+              </set>
+            </think>
+
+          </li>
+          <li></li>
+      </condition>
+      <condition name="gafas_n">
+         <li value="1">
+           <think>
+             <set name="preguntas">
+               <srai>REMOVEITEM <srai>FINDITEM 4 IN <get name="preguntas"/></srai> IN <get name="preguntas"/></srai>
+             </set>
+           </think>
+         </li>
+         <li></li>
+     </condition>
+     <condition name="bigote_n">
+        <li value="1">
+          <think>
+            <set name="preguntas">
+              <srai>REMOVEITEM <srai>FINDITEM 5 IN <get name="preguntas"/></srai> IN <get name="preguntas"/></srai>
+            </set>
+          </think>
+        </li>
+        <li></li>
+    </condition>
+    <condition name="barba_n">
+       <li value="1">
+         <think>
+
+           <set name="preguntas">
+             <srai>REMOVEITEM <srai>FINDITEM 6 IN <get name="preguntas"/></srai> IN <get name="preguntas"/></srai>
+           </set>
+         </think>
+       </li>
+       <li></li>
+   </condition>
+   <condition name="genero_n">
+      <li value="1">
+        <think>
+          <set name="preguntas">
+            <srai>REMOVEITEM <srai>FINDITEM 7 IN <get name="preguntas"/></srai> IN <get name="preguntas"/></srai>
+          </set>
+        </think>
+      </li>
+      <li></li>
+  </condition>
+    </template>
+  </category>
+
+  <category>
+  <pattern>PREGUNTA</pattern>
+    <template>
+      <think>
+        <set name="ultimapreg"><get var="preg"/></set>
+        <set var="sospechosos_n"><srai>COUNT <get name="sospechosos"/></srai></set>
+      </think>
+      <condition var="sospechosos_n">
+        <li value="0">
+          <srai>MENTIRA</srai>
+          <think>
+            <set var="preg">8</set>
+          </think>
+        </li>
+        <li value="1">
+          <think>
+            <set var="preg">8</set>
+            <set name="topic">resolver</set>
+          </think>
+          <srai>RESOLVER</srai>
+
+        </li>
+        <li>
+          <think>
+            <set var="preg"><srai>SELECTITEM <srai>RANDOM <srai>COUNT <get name="preguntas"/></srai></srai> IN <get name="preguntas"/></srai></set>
+          </think>
+        </li>
+      </condition>
+      <condition var="preg">
+        <li value="1">
+          Es <set name="ultimotipo"><srai>ELEMALEATORIO <get name="pelo"/></srai></set>  ?
+          <think><set name="ultimacat">pelo</set></think>
+      </li>
+        <li value="2">tiene los <set name="ultimacat">ojos</set> <set name="ultimotipo"><srai>ELEMALEATORIO <get name="ojos"/></srai></set>  ?</li>
+        <li value="3">tiene la <set name="ultimacat">piel</set> <set name="ultimotipo"><srai>ELEMALEATORIO <get name="piel"/></srai></set>  ?</li>
+        <li value="4">tiene <set name="ultimacat">gafas</set>?
+          <think><set name="ultimotipo">SI</set></think>
+        </li>
+        <li value="5">tiene <set name="ultimacat">bigote</set>?
+          <think><set name="ultimotipo">SI</set></think>
+        </li>
+        <li value="6">tiene <set name="ultimacat">barba</set>?
+          <think><set name="ultimotipo">SI</set></think>
+        </li>
+        <li value="7">
+          Es <set name="ultimotipo"><srai>ELEMALEATORIO <get name="genero"/></srai></set>
+          <think><set name="ultimacat">genero</set></think>
+        </li>
+        <li></li>
+      </condition>
+    </template>
+  </category>
+
+
+  <category>
+  <pattern>ELEMALEATORIO *</pattern>
+    <template>
+      <srai>SELECTITEM <srai>RANDOM <srai>COUNT <star/></srai></srai> IN <star/></srai>
+    </template>
+  </category>
+
+  <category>
+  <pattern>SI</pattern>
+    <template>
+      <think>
+        <set name="respuestas"><srai>ADDITEMREP SI IN <get name="respuestas"/></srai></set>
+        <set name="categorias_res"><srai>ADDITEMREP <get name="ultimacat"/> IN <get name="categorias_res"/></srai></set>
+        <set name="tipos_res"><srai>ADDITEMREP <get name="ultimotipo"/> IN <get name="tipos_res"/></srai></set>
+      </think>
+      <srai>IGUAL</srai>
+    </template>
+  </category>
+
+
+  <category>
+  <pattern>NO</pattern>
+    <template>
+      <think>
+        <set name="respuestas"><srai>ADDITEMREP NO IN <get name="respuestas"/></srai></set>
+        <set name="categorias_res"><srai>ADDITEMREP <get name="ultimacat"/> IN <get name="categorias_res"/></srai></set>
+        <set name="tipos_res"><srai>ADDITEMREP <get name="ultimotipo"/> IN <get name="tipos_res"/></srai></set>
+      </think>
+      <srai>DIFERENTE</srai>
+    </template>
+  </category>
+
+
+<category>
+  <pattern>IGUAL</pattern>
+    <template>
+      <think>
+        <set var="sig"><srai>ITERATE <get name="sospechosos"/></srai></set>
+      </think>
+        <condition var="sig">
+       <li value="end"></li>
+       <li>
+         <think>
+         <set var="real"><map><name><get name="ultimacat"/></name><get var="sig"/></map></set>
+        </think>
+         <condition var="real">
+           <li><value><get name="ultimotipo"/></value></li>
+           <li>
+              <think>
+                <set name="sospechosos">
+                  <srai>REMOVEITEM <srai>FINDITEM <get var="sig"/> IN <get name="sospechosos"/></srai> IN <get name="sospechosos"/></srai>
+                </set>
+              </think>
+            </li>
+         </condition>
+         <think><set var="sig"><srai>NEXT</srai></set></think>
+         <loop/>
+       </li>
+   </condition>
+        <think><srai>CALCULARRASGOS</srai></think>
+        <srai>PREGUNTA</srai>
+    </template>
+  </category>
+
+    <category>
+    <pattern>DIFERENTE</pattern>
+      <template>
+      <think>
+        <set var="sig"><srai>ITERATE <get name="sospechosos"/></srai></set>
+      </think>
+      <condition var="sig">
+         <li value="end"></li>
+         <li>
+           <think>
+           <set var="real"><map><name><get name="ultimacat"/></name><get var="sig"/></map></set>
+          </think>
+           <condition var="real">
+             <li><value><get name="ultimotipo"/></value>
+               <think>
+                 <set name="sospechosos">
+                   <srai>REMOVEITEM <srai>FINDITEM <get var="sig"/> IN <get name="sospechosos"/></srai> IN <get name="sospechosos"/></srai>
+                 </set>
+               </think>
+            </li>
+            <li></li>
+           </condition>
+           <think><set var="sig"><srai>NEXT</srai></set></think>
+           <loop/>
+         </li>
+     </condition>
+          <think><srai>CALCULARRASGOS</srai></think>
+          <srai>PREGUNTA</srai>
+      </template>
+    </category>
+
+    <category>
+    <pattern>ELEMALEATORIO *</pattern>
+      <template>
+        <srai>SELECTITEM <srai>RANDOM <srai>COUNT <star/></srai></srai> IN <star/></srai>
+      </template>
+    </category>
+
+
+
+
+
+</topic>
+<topic name="resolver">
+  <category>
+  <pattern>RESOLVER</pattern>
+    <template>
+      Es <get name="sospechosos"/> ???
+    </template>
+  </category>
+
+  <category>
+  <pattern>SI</pattern>
+    <template>
+      Bien he ganado!!! Quieres jugar otra vez??
+      <think>
+        <set name="topic">jugando</set>
+      </think>
+    </template>
+  </category>
+
+
+  <category>
+  <pattern>NO</pattern>
+    <template>
+      Me rindo!! Quien es entonces?
+    </template>
+  </category>
+
+  <category>
+  <pattern><set>personajes</set></pattern>
+    <template>
+      <srai>COMPROBAR <star/></srai>
+    </template>
+  </category>
+
+  <category>
+  <pattern>COMPROBAR *</pattern>
+    <template>
+      <think>
+        <set var="sig"><srai>ITERATE <get name="respuestas"/></srai></set>
+        <set var="contador">1</set>
+        <set name="personaje_res"><star/></set>
+        </think>
+        <condition var="sig">
+         <li value="end"></li>
+         <li>
+           <srai><get var="sig"/> CHECKRESPUESTA <get var="contador"/></srai>
+           <think>
+             <set var="sig"><srai>NEXT</srai></set>
+             <set var="contador"><map name="successor"><get var="contador"/></map></set>
+           </think>
+           <loop/>
+         </li>
+        </condition>
+        Quieres jugar otra vez mentiroso??
+        <think>
+          <set name="topic">jugando</set>
+        </think>
+
+  </template>
+  </category>
+
+  <category>
+   <pattern>* CHECKRESPUESTA *</pattern>
+   <template>
+     <think>
+       <set var="cat"><srai>SELECTITEM <star index="2"/> IN <get name="categorias_res"/></srai></set>
+       <set var="tipo"><srai>SELECTITEM <star index="2"/> IN <get name="tipos_res"/></srai></set>
+       <set var="leido"><map><name><get var="cat"/></name><get name="personaje_res"/></map></set>
+       <set var="salida"></set>
+     </think>
+     <condition var="leido">
+       <li><value><get var="tipo"/></value><think><set var="res">SI</set></think></li>
+       <li><think><set var="res">NO</set></think></li>
+     </condition>
+     <condition var="tipo">
+       <li value="si"><think><set var="tipo"></set></think></li>
+       <li></li>
+     </condition>
+     <condition var="res">
+       <li><value><star/></value></li>
+       <li>Me has mentido!!!Me dijiste que <star/> cuando te pregunte por <get var="cat"/> <get var="tipo"/></li>
+      </condition>
+  </template>
+  </category>
+
+
+
+
+
+</topic>
+
+
+
+</aiml>
